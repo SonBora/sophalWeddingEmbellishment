@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>សុផលសំអាងការ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep: #14080a;
+      --bg-card: #220d11;
+      --bg-card-2: #2c1116;
+      --gold: #e5b84b;
+      --gold-bright: #ffe08a;
+      --gold-dim: rgba(229, 184, 75, 0.28);
+      --text: #fff7e6;
+      --muted: #dec9a6;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Kantumruy Pro', sans-serif;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(229, 184, 75, 0.22), transparent 55%),
+        linear-gradient(180deg, #1b090c 0%, var(--bg-deep) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .aura-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(229, 184, 75, 0.08) 0%, transparent 35%),
+        radial-gradient(circle at 80% 75%, rgba(255, 224, 138, 0.07) 0%, transparent 40%);
+      animation: auraPulse 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes auraPulse {
+      0% { opacity: 0.65; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.04); }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(20, 8, 10, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gold-dim);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .header-inner {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold-bright);
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-shadow: 0 0 14px rgba(229, 184, 75, 0.35);
+    }
+
+    .lotus-icon {
+      display: inline-block;
+      animation: floatLotus 3s ease-in-out infinite;
+    }
+
+    @keyframes floatLotus {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-2px) rotate(4deg); }
+    }
+
+    .back-chip {
+      background: var(--bg-card-2);
+      color: var(--gold-bright);
+      border: 1px solid var(--gold-dim);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .back-chip:active {
+      transform: scale(0.95);
+      background: rgba(229, 184, 75, 0.2);
+    }
+
+    .page-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .tab-btn {
+      background: var(--bg-card);
+      color: var(--muted);
+      border: 1px solid var(--gold-dim);
+      border-radius: 10px;
+      padding: 7px 4px;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.22s ease;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+      color: #1c0b0e;
+      border-color: var(--gold-bright);
+      font-weight: 700;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(229, 184, 75, 0.35);
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 18px 14px 56px;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+      animation: pageReveal 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes pageReveal {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .khmer-frame {
+      position: relative;
+      background: linear-gradient(160deg, var(--bg-card-2), var(--bg-card));
+      border: 1.5px solid var(--gold);
+      border-radius: var(--radius);
+      box-shadow:
+        inset 0 0 0 3px rgba(20, 8, 10, 0.85),
+        inset 0 0 0 4.5px rgba(229, 184, 75, 0.35),
+        0 12px 28px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-card {
+      padding: 24px 18px;
+      text-align: center;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 45%;
+      height: 200%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 224, 138, 0.16),
+        transparent
+      );
+      transform: rotate(24deg);
+      animation: goldSweep 4.5s ease-in-out infinite;
+    }
+
+    @keyframes goldSweep {
+      0% { left: -60%; }
+      60%, 100% { left: 130%; }
+    }
+
+    .khmer-divider {
+      color: var(--gold);
+      font-size: 0.95rem;
+      letter-spacing: 4px;
+      margin-bottom: 6px;
+    }
+
+    .hero-card h1 {
+      font-size: 1.65rem;
+      color: var(--gold-bright);
+      margin-bottom: 6px;
+    }
+
+    .hero-card p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .price-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .price-tile {
+      padding: 18px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      opacity: 0;
+      animation: cardStagger 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .price-tile:nth-child(1) { animation-delay: 0.06s; }
+    .price-tile:nth-child(2) { animation-delay: 0.14s; }
+    .price-tile:nth-child(3) { animation-delay: 0.22s; }
+    .price-tile:nth-child(4) { animation-delay: 0.30s; }
+
+    @keyframes cardStagger {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .price-tile:hover,
+    .price-tile:active {
+      transform: translateY(-3px) scale(1.01);
+      border-color: var(--gold-bright);
+      box-shadow:
+        inset 0 0 0 3px rgba(20, 8, 10, 0.85),
+        inset 0 0 0 4.5px rgba(255, 224, 138, 0.55),
+        0 14px 30px rgba(229, 184, 75, 0.22);
+    }
+
+    .tile-left .tag {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .tile-left .name {
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .tile-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .amount {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--gold-bright);
+      text-shadow: 0 0 12px rgba(229, 184, 75, 0.3);
+    }
+
+    .arrow-pill {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+      color: #1b090c;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s ease;
+    }
+
+    .price-tile:hover .arrow-pill {
+      transform: translateX(3px);
+    }
+
+    /* Contact & Address Card on Page 1 */
+    .contact-card {
+      margin-top: 20px;
+      padding: 18px 16px;
+      opacity: 0;
+      animation: cardStagger 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.36s forwards;
+    }
+
+    .contact-heading {
+      text-align: center;
+      color: var(--gold-bright);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .contact-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 10px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1b090c;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+      box-shadow: 0 4px 14px rgba(229, 184, 75, 0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .contact-btn:hover,
+    .contact-btn:active {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(229, 184, 75, 0.38);
+    }
+
+    .address-box {
+      display: block;
+      text-decoration: none;
+      background: rgba(20, 8, 10, 0.65);
+      border: 1px solid var(--gold-dim);
+      border-radius: 12px;
+      padding: 12px 14px;
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--muted);
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .address-box:hover,
+    .address-box:active {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+      background: rgba(44, 17, 22, 0.85);
+      color: var(--text);
+    }
+
+    .address-box strong {
+      color: var(--gold-bright);
+      display: block;
+      margin-bottom: 3px;
+      font-size: 0.9rem;
+    }
+
+    /* Owner-defined image gallery for pages 2 to 5 */
+    .media-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .media-frame {
+      overflow: hidden;
+      padding: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      animation: mediaFloatIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .media-frame:nth-child(2) { animation-delay: 0.08s; }
+    .media-frame:nth-child(3) { animation-delay: 0.16s; }
+    .media-frame:nth-child(4) { animation-delay: 0.24s; }
+
+    @keyframes mediaFloatIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .media-frame:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        inset 0 0 0 3px rgba(20, 8, 10, 0.85),
+        inset 0 0 0 4.5px rgba(255, 224, 138, 0.5),
+        0 14px 28px rgba(229, 184, 75, 0.2);
+    }
+
+    .media-frame img {
+      width: 100%;
+      max-width: 92%;
+      height: auto;
+      max-height: 440px;
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .placeholder-slot {
+      padding: 36px 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="aura-bg"></div>
+
+  <header>
+    <div class="header-inner">
+      <div class="top-bar">
+        <div class="brand-title" onclick="goPage('page-1')">
+          <span class="lotus-icon">🪷</span>
+          <span id="headerTitleText">សុផលសំអាងការ</span>
+        </div>
+        <button class="back-chip" id="backHomeBtn" style="display:none;" onclick="goPage('page-1')">
+          ← ទំព័រទី១
+        </button>
+      </div>
+      <div class="page-strip">
+        <button class="tab-btn active" data-page="page-1" onclick="goPage('page-1')">ទី១</button>
+        <button class="tab-btn" data-page="page-2" onclick="goPage('page-2')">ទី២ · $2,600</button>
+        <button class="tab-btn" data-page="page-3" onclick="goPage('page-3')">ទី៣ · $2,200</button>
+        <button class="tab-btn" data-page="page-4" onclick="goPage('page-4')">ទី៤ · $1,900</button>
+        <button class="tab-btn" data-page="page-5" onclick="goPage('page-5')">ទី៥ · $1,400</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- PAGE 1: HOME + CLICKABLE PRICES + CONTACT & ADDRESS -->
+    <section class="page active" id="page-1">
+      <div class="khmer-frame hero-card">
+        <div class="khmer-divider">❖ ✦ ❖</div>
+        <h1>សុផលសំអាងការ</h1>
+        <p>ចុចលើតម្លៃដើម្បីបើកទំព័រនីមួយៗ</p>
+      </div>
+
+      <div class="price-stack" id="priceList"></div>
+
+      <div class="khmer-frame contact-card" id="contactSection"></div>
+    </section>
+
+    <!-- PAGES 2 TO 5: HEADER + IMAGES ADDED BY YOU IN CODE ONLY -->
+    <section class="page" id="page-2">
+      <div class="media-stack" id="media-page-2"></div>
+    </section>
+
+    <section class="page" id="page-3">
+      <div class="media-stack" id="media-page-3"></div>
+    </section>
+
+    <section class="page" id="page-4">
+      <div class="media-stack" id="media-page-4"></div>
+    </section>
+
+    <section class="page" id="page-5">
+      <div class="media-stack" id="media-page-5"></div>
+    </section>
+  </main>
+
+  <script>
+    // =========================================================================
+    // 1. PUT YOUR CONTACT URLS, PHONE NUMBER & ADDRESS HERE:
+    // =========================================================================
+    const CONTACT_INFO = {
+      facebook: 'https://www.facebook.com/share/1HzMwwtapn/?mibextid=wwXIfre',
+      telegram: 'https://t.me/c/3596695107/237',
+      phone: '0977782993',
+      tiktok: 'https://www.tiktok.com/@user279236929071?_r=1&_t=ZS-9BXSphtmbQ4',
+      address: 'https://maps.app.goo.gl/CaqkuDjZiLKzn8Yu7?g_st=ic'
+    };
+
+    // =========================================================================
+    // 2. PUT YOUR IMAGE PATHS OR URLS HERE (for pages 2 to 5):
+    // =========================================================================
+    const OWNER_PAGE_IMAGES = {
+      'page-2': [
+        'z2600.png'
+      ],
+      'page-3': [
+        'z2200.png'
+      ],
+      'page-4': [
+        'z1900.png'
+      ],
+      'page-5': [
+        'z1400.png'
+      ]
+    };
+
+    const SETS = [
+      { pageId: 'page-2', headerText: 'សុផលសំអាងការ · $2,600', pageLabel: 'ទំព័រទី២', setName: 'VIP Set', price: '$2,600' },
+      { pageId: 'page-3', headerText: 'សុផលសំអាងការ · $2,200', pageLabel: 'ទំព័រទី៣', setName: 'Set 3', price: '$2,200' },
+      { pageId: 'page-4', headerText: 'សុផលសំអាងការ · $1,900', pageLabel: 'ទំព័រទី៤', setName: 'Set 4', price: '$1,900' },
+      { pageId: 'page-5', headerText: 'សុផលសំអាងការ · $1,400', pageLabel: 'ទំព័រទី៥', setName: 'Set 5', price: '$1,400' }
+    ];
+
+    function renderHomePrices() {
+      document.getElementById('priceList').innerHTML = SETS.map(s => `
+        <div class="khmer-frame price-tile" onclick="goPage('${s.pageId}')">
+          <div class="tile-left">
+            <div class="tag">${s.pageLabel}</div>
+            <div class="name">${s.setName}</div>
+          </div>
+          <div class="tile-right">
+            <div class="amount">${s.price}</div>
+            <div class="arrow-pill">→</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderContact() {
+      const cleanPhone = String(CONTACT_INFO.phone || '').replace(/[^+\d]/g, '');
+      const addressUrl = String(CONTACT_INFO.address || '').trim();
+      const isAddressLink = /^https?:\/\//i.test(addressUrl);
+      const addressLabel = isAddressLink ? 'បើកមើលទីតាំងលើ Google Maps' : (addressUrl || 'អាសយដ្ឋាន');
+
+      document.getElementById('contactSection').innerHTML = `
+        <div class="contact-heading">❖ ទំនាក់ទំនង និងទីតាំង ❖</div>
+        <div class="contact-grid">
+          <a class="contact-btn" href="${escapeAttr(CONTACT_INFO.facebook)}" target="_blank" rel="noopener noreferrer">
+            <span>📘</span>
+            <span>Facebook</span>
+          </a>
+          <a class="contact-btn" href="${escapeAttr(CONTACT_INFO.telegram)}" target="_blank" rel="noopener noreferrer">
+            <span>✈️</span>
+            <span>Telegram</span>
+          </a>
+          <a class="contact-btn" href="tel:${escapeAttr(cleanPhone)}">
+            <span>📞</span>
+            <span>${escapeHtml(CONTACT_INFO.phone || 'Phone Call')}</span>
+          </a>
+          <a class="contact-btn" href="${escapeAttr(CONTACT_INFO.tiktok)}" target="_blank" rel="noopener noreferrer">
+            <span>🎵</span>
+            <span>TikTok</span>
+          </a>
+        </div>
+        ${isAddressLink ? `
+          <a class="address-box" href="${escapeAttr(addressUrl)}" target="_blank" rel="noopener noreferrer">
+            <strong>📍 អាសយដ្ឋាន (Google Maps)</strong>
+            <span>${escapeHtml(addressLabel)}</span>
+          </a>
+        ` : `
+          <div class="address-box">
+            <strong>📍 អាសយដ្ឋាន</strong>
+            <span>${escapeHtml(addressLabel)}</span>
+          </div>
+        `}
+      `;
+    }
+
+    function renderOwnerImages(pageId) {
+      const container = document.getElementById(`media-${pageId}`);
+      if (!container) return;
+      const list = (OWNER_PAGE_IMAGES[pageId] || []).filter(Boolean);
+
+      if (!list.length) {
+        container.innerHTML = `
+          <div class="khmer-frame placeholder-slot">
+            ដាក់ URL រូបភាពរបស់អ្នកក្នុង <code>OWNER_PAGE_IMAGES['${pageId}']</code>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map((src, i) => `
+        <div class="khmer-frame media-frame">
+          <img src="${escapeAttr(src)}" alt="សុផលសំអាងការ ${i + 1}" />
+        </div>
+      `).join('');
+    }
+
+    function goPage(targetId) {
+      document.querySelectorAll('.page').forEach(sec => sec.classList.remove('active'));
+      const activeSec = document.getElementById(targetId);
+      if (activeSec) {
+        activeSec.classList.add('active');
+        if (targetId !== 'page-1') {
+          renderOwnerImages(targetId);
+        }
+      }
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.page === targetId);
+      });
+
+      const found = SETS.find(s => s.pageId === targetId);
+      const headerTitle = document.getElementById('headerTitleText');
+      const backBtn = document.getElementById('backHomeBtn');
+
+      if (found) {
+        headerTitle.textContent = found.headerText;
+        backBtn.style.display = 'inline-block';
+      } else {
+        headerTitle.textContent = 'សុផលសំអាងការ';
+        backBtn.style.display = 'none';
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function escapeAttr(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    renderHomePrices();
+    renderContact();
+    ['page-2', 'page-3', 'page-4', 'page-5'].forEach(renderOwnerImages);
+  </script>
+</body>
+</html>
